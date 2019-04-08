@@ -1,3 +1,4 @@
+import os
 
 
 TO_TRAIN_DATA = '..\\CancerDetection\\data\\train\\1'

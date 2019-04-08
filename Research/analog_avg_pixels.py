@@ -132,62 +132,64 @@ class ImageInfo(object):
         self.mean = np.mean(self.pixels)
 
 
-dests_dict = {
-    'train': {
-        'dests': ['{}/{}'.format(config.TO_TRAIN_DATA, name) for name in os.listdir(config.TO_TRAIN_DATA)],
-        'mean': 69.15410413030831,
-        'colors': ['red'] * 3 + ['orange'] * 3
-    },
-    'value': {
-        'dests': ['{}/{}'.format(config.TO_VALUE_DATA, name) for name in os.listdir(config.TO_VALUE_DATA)],
-        'mean': 67.3797933693138,
-        'colors': ['cyan'] * 3 + ['pink'] * 3
-    },
-    'test': {
-        'dests': ['{}/{}'.format(config.TO_TEST_DATA, name) for name in os.listdir(config.TO_TEST_DATA)],
-        'mean': 70.04921331689272,
-        'colors': ['blue'] * 3 + ['purple'] * 3
-    },
+if __name__ == '__main__':
 
-}
-collection_list = []
-for name, obj in dests_dict.items():
-    img_collection = ImageCollectionInfo(name, obj['mean'])
+    dests_dict = {
+        'train': {
+            'dests': ['{}/{}'.format(config.TO_TRAIN_DATA, name) for name in os.listdir(config.TO_TRAIN_DATA)],
+            'mean': 69.15410413030831,
+            'colors': ['red'] * 3 + ['orange'] * 3
+        },
+        'value': {
+            'dests': ['{}/{}'.format(config.TO_VALUE_DATA, name) for name in os.listdir(config.TO_VALUE_DATA)],
+            'mean': 67.3797933693138,
+            'colors': ['cyan'] * 3 + ['pink'] * 3
+        },
+        'test': {
+            'dests': ['{}/{}'.format(config.TO_TEST_DATA, name) for name in os.listdir(config.TO_TEST_DATA)],
+            'mean': 70.04921331689272,
+            'colors': ['blue'] * 3 + ['purple'] * 3
+        },
 
-    for dest in obj['dests']:
-        img = ImageInfo(dest)
-        img_collection.add(img)
+    }
+    collection_list = []
+    for name, obj in dests_dict.items():
+        img_collection = ImageCollectionInfo(name, obj['mean'])
 
-    img_collection.show_info(obj['colors'])
-    collection_list.append(img_collection)
+        for dest in obj['dests']:
+            img = ImageInfo(dest)
+            img_collection.add(img)
 
-plt.title('total_avg')
-plt.hist(TotalPixels.total_colors, bins=50, color='cyan')
-plt.savefig('plots/total_avg.png')
-plt.show()
-plt.title('total_avg_l')
-plt.hist(TotalPixels.total_colors_l, bins=25, color='cyan')
-plt.savefig('plots/total_avg_l.png')
-plt.show()
-plt.title('total_avg_h')
-plt.hist(TotalPixels.total_colors_h, bins=25, color='cyan')
-plt.savefig('plots/total_avg_h.png')
-plt.show()
-plt.title('total_pixels')
-plt.hist(TotalPixels.total_list, bins=50, color='pink')
-plt.savefig('plots/total_pixels.png')
-plt.show()
-plt.title('total_pixels_l')
-plt.hist(TotalPixels.total_list_l, bins=50, color='pink')
-plt.savefig('plots/total_pixels_l.png')
-plt.show()
-plt.title('total_pixels_h')
-plt.hist(TotalPixels.total_list_h, bins=50, color='pink')
-plt.savefig('plots/total_pixels_h.png')
-plt.show()
-print('total mean:', np.mean(TotalPixels.total_colors))
-print('total mean_l:', np.mean(TotalPixels.total_colors_l))
-print('total mean_h:', np.mean(TotalPixels.total_colors_h))
-print('total mean_lh:', (np.mean(TotalPixels.total_colors_l) + np.mean(TotalPixels.total_colors_h)) / 2)
-print('total_l:', len(collection_list[0].total_colors + collection_list[1].total_colors + collection_list[2].total_colors),
-      'total_h', len(collection_list[0].total_colors_higher + collection_list[1].total_colors_higher + collection_list[2].total_colors_higher))
+        img_collection.show_info(obj['colors'])
+        collection_list.append(img_collection)
+
+    plt.title('total_avg')
+    plt.hist(TotalPixels.total_colors, bins=50, color='cyan')
+    plt.savefig('plots/total_avg.png')
+    plt.show()
+    plt.title('total_avg_l')
+    plt.hist(TotalPixels.total_colors_l, bins=25, color='cyan')
+    plt.savefig('plots/total_avg_l.png')
+    plt.show()
+    plt.title('total_avg_h')
+    plt.hist(TotalPixels.total_colors_h, bins=25, color='cyan')
+    plt.savefig('plots/total_avg_h.png')
+    plt.show()
+    plt.title('total_pixels')
+    plt.hist(TotalPixels.total_list, bins=50, color='pink')
+    plt.savefig('plots/total_pixels.png')
+    plt.show()
+    plt.title('total_pixels_l')
+    plt.hist(TotalPixels.total_list_l, bins=50, color='pink')
+    plt.savefig('plots/total_pixels_l.png')
+    plt.show()
+    plt.title('total_pixels_h')
+    plt.hist(TotalPixels.total_list_h, bins=50, color='pink')
+    plt.savefig('plots/total_pixels_h.png')
+    plt.show()
+    print('total mean:', np.mean(TotalPixels.total_colors))
+    print('total mean_l:', np.mean(TotalPixels.total_colors_l))
+    print('total mean_h:', np.mean(TotalPixels.total_colors_h))
+    print('total mean_lh:', (np.mean(TotalPixels.total_colors_l) + np.mean(TotalPixels.total_colors_h)) / 2)
+    print('total_l:', len(collection_list[0].total_colors + collection_list[1].total_colors + collection_list[2].total_colors),
+          'total_h', len(collection_list[0].total_colors_higher + collection_list[1].total_colors_higher + collection_list[2].total_colors_higher))
