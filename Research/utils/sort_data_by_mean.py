@@ -23,14 +23,14 @@ dests_dict = {
 
 dest_to_target = config.TO_ROOT + '/Research/data_prepared/sort_by_mean'
 
-# Iter tor train, value and test data
+# Iter to train, value and test data
 for key, value in dests_dict.items():
     count = len(value['dests'])
-    # Iter in every dest in train, value, test data
+    # Iter at every dest in train, value, test data
     for i, dest in enumerate(value['dests']):
         img = ImageInfo(dest)
 
-        # Get name of file which will copy
+        # Get name of file which will be copied
         name = dest.split('/')[-1]
         # Get mean and choose the folder (greater or less)
         mean_type = 'higher' if img.mean < value['mean'] else 'lower'
@@ -39,7 +39,7 @@ for key, value in dests_dict.items():
         # Copying
         copyfile(dest, new_dest)
 
-        # Lof of work
+        # Log of work
         print('[{}/{}] {} {} -> {}'.format(
             i, count, mean_type.capitalize().ljust(6, ' '), dest.ljust(95, ' '), new_dest))
 
