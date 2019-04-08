@@ -21,7 +21,8 @@ convnet = CNNModel()
 network = convnet.define_network(X_train_images)
 model = tflearn.DNN(network, tensorboard_verbose=0, \
                     checkpoint_path='nodule3-classifier.tfl.ckpt')
-model.fit(X_train_images, Y_train_labels, n_epoch=70, shuffle=True, \
+# model.fit(X_train_images, Y_train_labels, n_epoch=70, shuffle=True, \
+model.fit(X_train_images, Y_train_labels, n_epoch=70, shuffle=False, \
           validation_set=(X_val_images, Y_val_labels), show_metric=True, \
           batch_size=96, snapshot_epoch=True, run_id='nodule3-classifier')
 model.save("nodule3-classifier.tfl")
