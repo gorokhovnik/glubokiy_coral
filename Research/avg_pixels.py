@@ -282,8 +282,9 @@ print('total mean_lh:', (np.mean(total_colors_l) + np.mean(total_colors_h)) / 2)
 print('total_l:', len(train_colors_l + value_colors_l + test_colors_l), 'total_h',
       len(train_colors_h + value_colors_h + test_colors_h))
 
-# plt.hist([total_list_l, total_list_h], bins=50, color=['red', 'blue'])
-# plt.show()
+plt.hist([total_list_l, total_list_h], bins=50, color=['red', 'blue'])
+plt.savefig('plots/compare.png')
+plt.show()
 
 total_low = []
 total_high = []
