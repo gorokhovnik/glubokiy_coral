@@ -55,7 +55,8 @@ class CNNModel(object):
         img_aug = self.augmentation()
         self.network = input_data(shape=[None, X_images.shape[1], X_images.shape[2], X_images.shape[3]],
                                   data_preprocessing=img_prep,
-                                  data_augmentation=img_aug,
+                                  # data_augmentation=img_aug,
+                                  data_augmentation=None,
                                   name=name)
         return self.network
 

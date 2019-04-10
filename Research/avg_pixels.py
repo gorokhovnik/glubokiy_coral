@@ -284,3 +284,17 @@ print('total_l:', len(train_colors_l + value_colors_l + test_colors_l), 'total_h
 
 # plt.hist([total_list_l, total_list_h], bins=50, color=['red', 'blue'])
 # plt.show()
+
+total_low = []
+total_high = []
+for pix in total_list:
+    if pix != 0 and pix != 255:
+        if pix < 128:
+            total_low += [pix]
+        else:
+            total_high += [pix]
+
+print('mean <128:', np.mean(total_low))
+print('std <128:', np.std(total_low))
+print('mean >128:', np.mean(total_high))
+print('std >128:', np.std(total_high))
