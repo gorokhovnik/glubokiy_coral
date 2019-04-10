@@ -35,6 +35,8 @@ for dest in train_dests:
         for j in range(50):
             r, g, b = im_rgb.getpixel((i, j))
             temp_list += [r]
+    # plt.hist(temp_list, bins=50, color='black')
+    # plt.show()
     train_labels['mean'] = np.where(train_labels['img'] == img_name, np.mean(temp_list), train_labels['mean'])
     train_colors += [np.mean(temp_list)]
     total_colors += [np.mean(temp_list)]
