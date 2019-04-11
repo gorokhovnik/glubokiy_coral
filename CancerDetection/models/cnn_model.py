@@ -55,8 +55,7 @@ class CNNModel(object):
         img_aug = self.augmentation()
         self.network = input_data(shape=[None, X_images.shape[1], X_images.shape[2], X_images.shape[3]],
                                   data_preprocessing=img_prep,
-                                  # data_augmentation=img_aug,
-                                  data_augmentation=None,
+                                  data_augmentation=img_aug,
                                   name=name)
         return self.network
 
@@ -147,4 +146,4 @@ class CNNModel(object):
         if mode == 'testtrain':
             return self.network
         if mode == 'visual':
-            return conv_layer_1, conv_layer_2, conv_layer_3, self.network
+            return conv_layer_1, conv_layer_2, conv_layer_3, self.network,

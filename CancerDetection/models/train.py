@@ -1,7 +1,7 @@
 """
 Trains a CNN model using tflearn wrapper for tensorflow
 """
-
+import tensorflow as tf
 import tflearn
 import h5py
 import numpy as np
@@ -15,6 +15,9 @@ Y_train_labels = h5f['Y']
 h5f2 = h5py.File('../data/val.h5', 'r')
 X_val_images = h5f2['X']
 Y_val_labels = h5f2['Y']
+
+tf.reset_default_graph()
+tflearn.init_graph(seed=228)
 
 ## Model definition
 convnet = CNNModel()
