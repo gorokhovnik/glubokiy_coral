@@ -15,6 +15,12 @@ value_labels.columns = ['img', 'target']
 test_labels = pd.read_csv('../data/testdatalabels.txt', delimiter=' ', header=None)
 test_labels.columns = ['img', 'target']
 
+mean_total = 69.06738499234304
+std_total = 68.45855223205473
+mean_low = 34.77274047733289
+std_low = 24.00922853254174
+mean_high = 187.0906383787584
+std_high = 29.22877675953323
 
 def create_feature_sets_and_labels(data='train'):
     x = []
@@ -30,13 +36,41 @@ def create_feature_sets_and_labels(data='train'):
         img_name = dest[dest.rfind('/') + 1:]
         im = Image.open(dest)
         im_rgb = im.convert('RGB')
+        tmp_l = []
+        tmp_h = []
         pic_list = []
         for i in range(50):
             temp_list = []
             for j in range(50):
                 r, g, b = im_rgb.getpixel((i, j))
                 temp_list += [r]
+                if r < 128:
+                    tmp_l += [r]
+                else:
+                    tmp_h += [r]
             pic_list += [temp_list]
+        low_mean = np.mean(tmp_l)
+        low_std = np.std(tmp_l)
+        high_mean = np.mean(tmp_h)
+        high_std = np.std(tmp_h)
+        total_mean = np.mean(tmp_l + tmp_h)
+        total_std = np.std(tmp_l + tmp_h)
+        if low_std == 0:
+            low_std = std_low
+        if high_std == 0:
+            high_std = std_high
+        if total_std == 0:
+            total_std = std_total
+
+        for i in range(50):
+            for j in range(50):
+                # pic_list[i][j] = ((pic_list[i][j] - total_mean) / total_std * std_total + mean_total) / 255
+
+                if pic_list[i][j] < 128:
+                    pic_list[i][j] = ((pic_list[i][j] - low_mean) / low_std * std_low + mean_low) / 255
+                else:
+                    pic_list[i][j] = ((pic_list[i][j] - high_mean) / high_std * std_high + mean_high) / 255
+
         if data == 'train':
             target = train_labels[train_labels['img'] == img_name]['target'].sum()
         elif data == 'val':
@@ -64,4 +98,6 @@ value_x, value_y = create_feature_sets_and_labels('val')
 
 model = tflearn.DNN(net, tensorboard_verbose=None)
 
-model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=5, batch_size=16, show_metric=True)
+model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=24, show_metric=True)
+
+model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=24, show_metric=True)

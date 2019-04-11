@@ -294,13 +294,15 @@ plt.show()
 
 total_low = []
 total_high = []
-for pix in total_list:
-    if pix != 0 and pix != 255:
-        if pix < 128:
-            total_low += [pix]
-        else:
-            total_high += [pix]
+for pix in (total_list):
+    if pix < 128:
+        total_low += [pix]
+    else:
+        total_high += [pix]
 
+print('not equal')
+print('mean:', np.mean(total_list))
+print('std:', np.std(total_list))
 print('mean <128:', np.mean(total_low))
 print('std <128:', np.std(total_low))
 print('mean >128:', np.mean(total_high))
