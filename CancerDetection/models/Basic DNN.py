@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
 import config
 import numpy as np
 import pandas as pd
@@ -67,7 +68,7 @@ def create_feature_sets_and_labels(data='train'):
                 # pic_list[i][j] = ((pic_list[i][j] - total_mean) / total_std * std_total + mean_total) / 255
 
                 if pic_list[i][j] < 128:
-                    pic_list[i][j] = ((pic_list[i][j] - low_mean) / low_std * std_low + mean_low) / 255
+                    pic_list[i][j] = ((pic_list[i][j] - low_mean) / high_std * std_high + mean_low) / 255
                 else:
                     pic_list[i][j] = ((pic_list[i][j] - high_mean) / high_std * std_high + mean_high) / 255
 
@@ -82,22 +83,32 @@ def create_feature_sets_and_labels(data='train'):
         y += [[target, 1 - target]]
     return x, y
 
+def my_accuracy_score(y_true, y_pred):
+    n = len(y_true)
+    sum = 0
+    for i in range(n):
+        sum += abs(y_true - y_pred)
+    return sum / n
+
+a = [5, 23, 34, 2, 4, 9, 10]
 
 tf.reset_default_graph()
 tflearn.init_graph(seed=228)
 
 net = tflearn.input_data(shape=[None, 50, 50])
 
-net = tflearn.fully_connected(net, 32)
-net = tflearn.fully_connected(net, 32)
-net = tflearn.fully_connected(net, 2, activation='softmax')
+net = tflearn.fully_connected(net, 32, name='hidden1')
+net = tflearn.fully_connected(net, 32, name='hidden2')
+net = tflearn.fully_connected(net, 2, activation='softmax', name='output')
 net = tflearn.regression(net, shuffle_batches=False)
 
 train_x, train_y = create_feature_sets_and_labels('train')
 value_x, value_y = create_feature_sets_and_labels('val')
+value_x += train_x[5000:]
+value_y += train_y[5000:]
+train_x = train_x[:5000]
+train_y = train_y[:5000]
 
 model = tflearn.DNN(net, tensorboard_verbose=None)
 
-model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=24, show_metric=True)
-
-model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=24, show_metric=True)
+model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=10, batch_size=20, show_metric=True)
