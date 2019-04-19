@@ -300,7 +300,6 @@ for pix in (total_list):
     else:
         total_high += [pix]
 
-print('not equal')
 print('mean:', np.mean(total_list))
 print('std:', np.std(total_list))
 print('mean <128:', np.mean(total_low))
