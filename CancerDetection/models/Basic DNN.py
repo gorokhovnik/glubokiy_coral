@@ -85,13 +85,6 @@ def create_feature_sets_and_labels(data='train'):
     return x, y
 
 
-def my_accuracy_score(y_true, y_pred):
-    n = len(y_true)
-    sum = 0
-    for i in range(n):
-        sum += abs(y_true - y_pred)
-    return sum / n
-
 train_x, train_y = create_feature_sets_and_labels('train')
 value_x, value_y = create_feature_sets_and_labels('val')
 test_x, test_y = create_feature_sets_and_labels('test')
