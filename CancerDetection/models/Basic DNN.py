@@ -115,7 +115,7 @@ net = tflearn.regression(net, shuffle_batches=False)
 
 model = tflearn.DNN(net, tensorboard_verbose=None)
 
-for ep in range(1, 11):
+for ep in range(10):
     model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=20)
 
     train_p = np.array(model.predict(train_x))[:, 0]
