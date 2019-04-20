@@ -92,17 +92,6 @@ def my_accuracy_score(y_true, y_pred):
         sum += abs(y_true - y_pred)
     return sum / n
 
-
-tf.reset_default_graph()
-tflearn.init_graph(seed=228)
-
-net = tflearn.input_data(shape=[None, 50, 50])
-
-net = tflearn.fully_connected(net, 32, name='hidden1')
-net = tflearn.fully_connected(net, 32, name='hidden2')
-net = tflearn.fully_connected(net, 2, activation='softmax', name='output')
-net = tflearn.regression(net, shuffle_batches=False)
-
 train_x, train_y = create_feature_sets_and_labels('train')
 value_x, value_y = create_feature_sets_and_labels('val')
 test_x, test_y = create_feature_sets_and_labels('test')
@@ -112,6 +101,29 @@ value_y = train_y[3500:] + value_y[600:] + test_y[900:]
 train_x = tmp_x
 train_y = tmp_y
 
+train_AUC = []
+value_AUC = []
+
+tf.reset_default_graph()
+tflearn.init_graph(seed=228)
+
+net = tflearn.input_data(shape=[None, 50, 50])
+net = tflearn.fully_connected(net, 32, name='hidden1')
+net = tflearn.fully_connected(net, 32, name='hidden2')
+net = tflearn.fully_connected(net, 2, activation='softmax', name='output')
+net = tflearn.regression(net, shuffle_batches=False)
+
 model = tflearn.DNN(net, tensorboard_verbose=None)
 
-model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=10, batch_size=20)
+for ep in range(1, 11):
+    model.fit(train_x, train_y, validation_set=(value_x, value_y), n_epoch=1, batch_size=20)
+
+    train_p = np.array(model.predict(train_x))[:, 0]
+    value_p = np.array(model.predict(value_x))[:, 0]
+    train_AUC += [roc_auc_score(np.array(train_y)[:, 0], train_p)]
+    value_AUC += [roc_auc_score(np.array(value_y)[:, 0], value_p)]
+
+AUCs = pd.DataFrame()
+AUCs['train'] = pd.Series(train_AUC)
+AUCs['value'] = pd.Series(value_AUC)
+print(AUCs)
