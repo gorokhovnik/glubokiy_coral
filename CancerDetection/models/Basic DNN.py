@@ -23,6 +23,7 @@ std_low = 24.00922853254174
 mean_high = 187.0906383787584
 std_high = 29.22877675953323
 
+
 def create_feature_sets_and_labels(data='train'):
     x = []
     y = []
@@ -54,8 +55,9 @@ def create_feature_sets_and_labels(data='train'):
         low_std = np.std(tmp_l)
         high_mean = np.mean(tmp_h)
         high_std = np.std(tmp_h)
-        total_mean = np.mean(tmp_l + tmp_h)
-        total_std = np.std(tmp_l + tmp_h)
+        total_mean = np.mean(pic_list)
+        total_std = np.std(pic_list)
+
         if low_std == 0:
             low_std = std_low
         if high_std == 0:
@@ -88,11 +90,12 @@ def create_feature_sets_and_labels(data='train'):
 train_x, train_y = create_feature_sets_and_labels('train')
 value_x, value_y = create_feature_sets_and_labels('val')
 test_x, test_y = create_feature_sets_and_labels('test')
-tmp_x, tmp_y = train_x[:3500] + value_x[:600] + test_x[:900], train_y[:3500] + value_y[:600] + test_y[:900]
-value_x = train_x[3500:] + value_x[600:] + test_x[900:]
-value_y = train_y[3500:] + value_y[600:] + test_y[900:]
-train_x = tmp_x
-train_y = tmp_y
+
+tmp_x, tmp_y = train_x[:3500] + value_x[:600] + test_x[:900], \
+               train_y[:3500] + value_y[:600] + test_y[:900]
+value_x, value_y = train_x[3500:] + value_x[600:] + test_x[900:], \
+                   train_y[3500:] + value_y[600:] + test_y[900:]
+train_x, train_y = tmp_x, tmp_y
 
 train_AUC = []
 value_AUC = []

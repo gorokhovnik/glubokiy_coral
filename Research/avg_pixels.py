@@ -306,3 +306,31 @@ print('mean <128:', np.mean(total_low))
 print('std <128:', np.std(total_low))
 print('mean >128:', np.mean(total_high))
 print('std >128:', np.std(total_high))
+
+rate_l = []
+rate_h = []
+for bright in range(25, 125):
+    tmp_l = 0
+    tmp_h = 0
+    for dest in train_dests + val_dests + test_dests:
+        im = Image.open(dest)
+        im_rgb = im.convert('RGB')
+        temp_list = []
+        for i in range(50):
+            for j in range(50):
+                r, g, b = im_rgb.getpixel((i, j))
+                temp_list += [r]
+        pic_bright = np.mean(temp_list)
+        if (pic_bright >= bright and pic_bright < bright + 1):
+            for pix in temp_list:
+                if pix < 128:
+                    tmp_l += 1
+                else:
+                    tmp_h += 1
+    rate_l += [tmp_l / (tmp_l + tmp_h)]
+    rate_h += [tmp_h / (tmp_l + tmp_h)]
+
+plt.plot([i for i in range(25, 125)], rate_l)
+plt.plot([i for i in range(25, 125)], rate_h)
+plt.savefig('plots/parts_ratio.png')
+plt.show()
